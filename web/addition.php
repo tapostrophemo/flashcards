@@ -25,30 +25,35 @@ include_once('mathnav.php');
 <p>The activity begins with a screen that pops-up on the window. Type your answer in the box, then
  press the "Answer" button (tip: pressing the "Enter" key on you keyboard is even faster). The cell
  with that problem will be colored <span class="correct">green if you correctly answer the problem</span>,
- or <span class="incorrect">red if your answer is incorrect</span>.</p>
+ or <span class="incorrect">red if your answer is incorrect</span>. If you got an answer wrong the
+ answer you entered will appear at the bottom of that cell. Questions you <span class="freebie">don't
+ have to answer are colored grey</span>.</p>
 
-<p>Choose your skill level:<br/><label>Beginner . . . Intermediate . . . Advanced</label></p>
+<p>Choose your skill level:</p>
+<p><label>Beginner . . . Intermediate . . . Advanced</label><br/>
 <?php for ($i = 3; $i <= 10; $i++): ?>
-<input type="radio" name="level" value="<?=$i?>"/>
+ <input type="radio" name="level" value="<?=$i?>"/>
 <?php endfor; ?>
+</p>
+<p>The timer starts when you answer the first question.</p>
 
 <br/><br/>
 
 <div id="field" class="rounded" style="display:none">
  <img src="res/x.png" id="close" alt="close"/>
  <div>
-  <p><span id="first">0</span><br/>+ <span id="second">0</p>
+  <span id="first">0</span><br/>
+  <span>+</span> <span id="second">0</span>
   <hr size="2"/>
   <input type="text" size="10" id="answer"/><br/>
   <input type="button" value="Answer" id="respond"/>
-  <input type="hidden" value="0" id="correct"/>
   <p><span id="remaining"><?=count($nums)*count($nums)?></span> problems left</p>
  </div>
  <p id="msg"></p>
 </div>
 
 <table>
-<?php $nums = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10); foreach ($nums as $row): ?>
+<?php $nums = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12); foreach ($nums as $row): ?>
  <tr>
  <?php foreach ($nums as $col): ?>
   <td id="cell_<?=$row?>_<?=$col?>" class="unanswered">
@@ -99,21 +104,36 @@ function play(data, current) {
     $("#answer").val("").focus();
     $("#first").text(data[current].first);
     $("#second").text(data[current].second);
-    $("#correct").val(data[current].correct);
     $("#field").fadeIn();
 
     $("#respond").unbind("click");
     $("#respond").click(function () {
       var cell = $("#cell_"+data[current].first+"_"+data[current].second);
       cell.removeClass("unanswered");
-      cell.addClass($("#answer").val() == data[current].correct ? "correct" : "incorrect");
+      if ($("#answer").val() == data[current].correct) {
+        cell.addClass("correct");
+      }
+      else {
+        cell.addClass("incorrect");
+        cell.append('<div class="yourAnswer">' + $("#answer").val() + '</div>');
+      }
+
+      if (!data.timer) {
+        data.timer = new Date();
+      }
 
       play(data, current + 1);
     });
   }
   else {
     $("#respond").unbind("click");
-    $("#msg").html("<p>You've completed all problems!</p><p>Check your results below.</p>");
+
+    var seconds = ((new Date()) - data.timer) / 1000;
+    var msg = "<p>You've completed all problems!</p>";
+    msg += "<p>Check your results in the table.</p>";
+    msg += "<p>You completed " + data.length + " problems in " + seconds + " seconds.</p>";
+    $("#msg").html(msg);
+
     $("#field div").slideUp();
   }
 }
@@ -127,6 +147,7 @@ function startPlay() {
   if (skillFactor) {
     exposeFreebies(skillFactor);
     $("#msg").html("");
+    $("[class=yourAnswer]").remove();
     $("#field div").slideDown();
 
     var problems = getProblems();
@@ -139,6 +160,7 @@ function startPlay() {
         correct: parts[1]*1 + parts[2]*1};
     });
     data.sort(rnd).sort(rnd).sort(rnd).sort(rnd).sort(rnd);
+    data.timer = null;
 
     play(data, 0);
   }

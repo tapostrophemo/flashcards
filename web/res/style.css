@@ -51,6 +51,7 @@ table {
 }
 
 td {
+  background-color: #eee;
   padding: 2px 7px;
 }
 
@@ -86,11 +87,18 @@ td {
 .unanswered {
   visibility: hidden;
 }
+.freebie {
+  background-color: #eee;
+}
 .correct {
   background-color: #cfc;
 }
 .incorrect {
   background-color: #fcc;
+  font-weight: bold;
+}
+.yourAnswer {
+  font-style: italic;
 }
 
 label {
@@ -124,7 +132,7 @@ a:hover {
   text-align: right;
 }
 #field span {
-  font-size: 14px;
+  font-size: 18px;
 }
 #field input {
   font-size: 11px;
