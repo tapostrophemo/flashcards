@@ -40,7 +40,7 @@ include_once('mathnav.php');
 <br/><br/>
 
 <div id="field" class="rounded" style="display:none">
- <img src="res/x.png" id="close" alt="close"/>
+ <a href="#" id="close"><img src="res/x.png" alt="close"/></a>
  <div>
   <span id="first">0</span><br/>
   <span>+</span> <span id="second">0</span>
@@ -80,25 +80,20 @@ function exposeFreebies(skillFactor) {
   });
 }
 
-function resetFreebies() {
+function reset() {
   getAnswerCells().each(function (i, node) {
     $("#"+node.id).removeClass("correct");
     $("#"+node.id).removeClass("incorrect");
     $("#"+node.id).addClass("unanswered");
   });
-}
-
-function getProblems() {
-  return $("td[id^=cell_][class=unanswered]");
-}
-
-function getSkillFactor() {
-  var level = $("input[name=level][checked]:radio");
-  return level ? level.attr("value") / 10 : null;
+  $("#msg").html("");
+  $("[class=yourAnswer]").remove();
+  $("#field div").slideDown();
 }
 
 function play(data, current) {
   $("#remaining").text(data.length - current);
+  $("#respond").unbind("click");
 
   if (current < data.length) {
     $("#answer").val("").focus();
@@ -106,7 +101,6 @@ function play(data, current) {
     $("#second").text(data[current].second);
     $("#field").fadeIn();
 
-    $("#respond").unbind("click");
     $("#respond").click(function () {
       var cell = $("#cell_"+data[current].first+"_"+data[current].second);
       cell.removeClass("unanswered");
@@ -126,15 +120,13 @@ function play(data, current) {
     });
   }
   else {
-    $("#respond").unbind("click");
+    $("#field div").slideUp();
 
     var seconds = ((new Date()) - data.timer) / 1000;
     var msg = "<p>You've completed all problems!</p>";
     msg += "<p>Check your results in the table.</p>";
     msg += "<p>You completed " + data.length + " problems in " + seconds + " seconds.</p>";
     $("#msg").html(msg);
-
-    $("#field div").slideUp();
   }
 }
 
@@ -142,16 +134,17 @@ function rnd() {
   return 0.5 - Math.random();
 }
 
+function getSkillFactor() {
+  var level = $("input[name=level][checked]:radio");
+  return level ? level.attr("value") / 10 : null;
+}
+
 function startPlay() {
   var skillFactor = getSkillFactor();
   if (skillFactor) {
     exposeFreebies(skillFactor);
-    $("#msg").html("");
-    $("[class=yourAnswer]").remove();
-    $("#field div").slideDown();
 
-    var problems = getProblems();
-    $("#remaining").text(problems.length);
+    var problems = $("td[id^=cell_][class=unanswered]");
     var data = $.map(problems, function (problem, i) {
       var parts = problem.id.split("_");
       return {
@@ -172,7 +165,7 @@ function startPlay() {
 $(document).ready(function () {
   $("input[name=level]").each(function (i, node) {
     $(node).click(function () {
-      resetFreebies();
+      reset();
       startPlay();
     });
   });
@@ -183,7 +176,8 @@ $(document).ready(function () {
     }
   });
 
-  $("#close").click(function () {
+  $("#close").click(function (event) {
+    event.preventDefault();
     $("#field").fadeOut("fast");
   });
 

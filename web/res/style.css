@@ -138,10 +138,15 @@ a:hover {
   font-size: 11px;
   text-align: right;
 }
+#field img {
+  border: 0;
+}
 
 .rounded {
+  border-radius: 7px;
   -moz-border-radius: 7px;
   -webkit-border-radius: 7px;
+  box-shadow: black 3px 3px 7px;
   -moz-box-shadow: black 3px 3px 7px;
 }
 
