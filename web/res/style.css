@@ -51,7 +51,6 @@ table {
 }
 
 td {
-  background-color: #eee;
   padding: 2px 7px;
 }
 
@@ -79,6 +78,7 @@ table {
   border-top: 1px solid black;
 }
 td {
+  background-color: #eee;
   border-bottom: 1px solid black;
   border-right: 1px solid black;
   text-align: right;
@@ -143,10 +143,9 @@ a:hover {
 }
 
 .rounded {
-  border-radius: 7px;
   -moz-border-radius: 7px;
   -webkit-border-radius: 7px;
-  box-shadow: black 3px 3px 7px;
   -moz-box-shadow: black 3px 3px 7px;
+  -webkit-box-shadow: black 3px 3px 7px;
 }
 

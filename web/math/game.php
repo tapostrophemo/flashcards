@@ -82,8 +82,7 @@ function exposeFreebies(skillFactor) {
 
 function reset() {
   getAnswerCells().each(function (i, node) {
-    $("#"+node.id).removeClass("correct");
-    $("#"+node.id).removeClass("incorrect");
+    $("#"+node.id).removeClass("correct").removeClass("incorrect");
     $("#"+node.id).addClass("unanswered");
   });
   $("#msg").html("");
@@ -96,10 +95,9 @@ function play(data, current) {
   $("#respond").unbind("click");
 
   if (current < data.length) {
-    $("#answer").val("").focus();
     $("#first").text(data[current].first);
     $("#second").text(data[current].second);
-    $("#field").fadeIn();
+    $("#answer").val("").focus();
 
     $("#respond").click(function () {
       var cell = $("#cell_"+data[current].first+"_"+data[current].second);
@@ -155,6 +153,7 @@ function startPlay() {
     data.sort(rnd).sort(rnd).sort(rnd).sort(rnd).sort(rnd);
     data.timer = null;
 
+    $("#field").fadeIn();
     play(data, 0);
   }
   else {
