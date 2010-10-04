@@ -154,6 +154,10 @@ a:hover {
 #field img {
   border: 0;
 }
+#field #msg {
+  text-align: left;
+  margin-left: 1em;
+}
 
 .rounded {
   -moz-border-radius: 7px;
