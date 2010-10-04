@@ -40,16 +40,18 @@ $nums = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
 <br/><br/>
 
 <div id="field" class="rounded" style="display:none">
- <a href="#" id="close"><img src="res/x.png" alt="close"/></a>
- <div>
-  <span id="first">0</span><br/>
-  <span><?=$sign?></span> <span id="second">0</span>
-  <hr size="2"/>
-  <input type="text" size="10" id="answer"/><br/>
-  <input type="button" value="Answer" id="respond"/>
-  <p><span id="remaining"><?=count($nums)*count($nums)?></span> problems left</p>
+ <div id="fieldWrapper">
+  <a href="#" id="close"><img src="res/x.png" alt="close"/></a>
+  <div>
+   <span id="first">0</span><br/>
+   <span><?=$sign?></span> <span id="second">0</span>
+   <hr size="2"/>
+   <input type="text" size="10" id="answer"/><br/>
+   <input type="button" value="Answer" id="respond"/>
+   <p><span id="remaining"><?=count($nums)*count($nums)?></span> problems left</p>
+  </div>
+  <p id="msg"></p>
  </div>
- <p id="msg"></p>
 </div>
 
 <table>
@@ -118,12 +120,11 @@ function play(data, current) {
     });
   }
   else {
-    $("#field div").slideUp();
+    $("#fieldWrapper div").slideUp("fast");
 
     var seconds = ((new Date()) - data.timer) / 1000;
-    var msg = "<p>You've completed all problems!</p>";
-    msg += "<p>Check your results in the table.</p>";
-    msg += "<p>You completed " + data.length + " problems in " + seconds + " seconds.</p>";
+    var msg = "<p>Finished! You completed " + data.length + " problems in " + seconds + " seconds.</p>";
+    msg += "<p>Close this window and check your results in the table.</p>";
     $("#msg").html(msg);
   }
 }

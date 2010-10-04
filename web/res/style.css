@@ -56,7 +56,15 @@ td {
 
 #field {
   position: absolute;
+  width: 380px;
+  top: 10%;
+  left: 50%;
+  margin-left: -190px;
+  font-size: 375%;
+}
+#fieldWrapper {
   padding: 10px;
+  margin: -2px;
 }
 #close {
   float: left;
@@ -126,16 +134,21 @@ a:hover {
 }
 
 #field {
-  border: 3px solid #c88;
+  border: 8px solid #c88;
   background-color: #800;
   color: white;
   text-align: right;
 }
+#fieldWrapper {
+  border: 3px solid #c88;
+  -moz-border-radius: 7px;
+  -webkit-border-radius: 7px;
+}
 #field span {
-  font-size: 18px;
+  font-size: 1.8em;
 }
 #field input {
-  font-size: 11px;
+  font-size: 0.9em;
   text-align: right;
 }
 #field img {
