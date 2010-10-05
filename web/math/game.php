@@ -19,7 +19,7 @@ $nums = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
 
 <?php include_once('nav.php'); ?>
 
-<p>In this exercise you will have to complete addition problems. Based on your skill level, several
+<p>In this exercise you will have to complete <?=$current?> problems. Based on your skill level, several
  of the problems will already be answered. Answer the problems as quickly as you can; try to get
  faster and faster.</p>
 <p>The activity begins with a screen that pops-up on the window. Type your answer in the box, then
@@ -54,7 +54,7 @@ $nums = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
  </div>
 </div>
 
-<table>
+<table id="problems" style="opacity:0">
 <?php foreach ($nums as $row): ?>
  <tr>
  <?php foreach ($nums as $col): ?>
@@ -90,6 +90,7 @@ function reset() {
   $("#msg").html("");
   $("[class=yourAnswer]").remove();
   $("#field div").slideDown();
+  $("#problems").animate({opacity:0}, 200);
 }
 
 function play(data, current) {
@@ -120,12 +121,13 @@ function play(data, current) {
     });
   }
   else {
-    $("#fieldWrapper div").slideUp("fast");
+    $("#fieldWrapper div").slideUp();
 
     var seconds = ((new Date()) - data.timer) / 1000;
     var msg = "<p>Finished! You completed " + data.length + " problems in " + seconds + " seconds.</p>";
-    msg += "<p>Close this window and check your results in the table.</p>";
+    msg += "<p>Close this window and check your answers.</p>";
     $("#msg").html(msg);
+    $("#problems").animate({opacity:1}, 400);
   }
 }
 
