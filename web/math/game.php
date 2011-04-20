@@ -22,6 +22,7 @@ $nums = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
 <p>In this exercise you will have to complete <?=$current?> problems. Based on your skill level, several
  of the problems will already be answered. Answer the problems as quickly as you can; try to get
  faster and faster.</p>
+<?php if (isset($note)) echo "<p>$note</p>"; ?>
 <p>The activity begins with a screen that pops-up on the window. Type your answer in the box, then
  press the "Answer" button (tip: pressing the "Enter" key on you keyboard is even faster). The cell
  with that problem will be colored <span class="correct">green if you correctly answer the problem</span>,
@@ -44,7 +45,7 @@ $nums = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
   <a href="#" id="close"><img src="res/x.png" alt="close"/></a>
   <div>
    <span id="first">0</span><br/>
-   <span><?=$sign?></span> <span id="second">0</span>
+   <span><?=isset($displaySign) ? $displaySign : $sign?></span> <span id="second">0</span>
    <hr size="2"/>
    <input type="text" size="10" id="answer"/><br/>
    <input type="button" value="Answer" id="respond"/>
@@ -59,7 +60,7 @@ $nums = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
  <tr>
  <?php foreach ($nums as $col): ?>
   <td id="cell_<?=$row?>_<?=$col?>" class="unanswered">
-   <?php printf('%d %s %d<hr size="1">%d', $row, $sign, $col, op($row, $col)); ?>
+   <?php printf('%d %s %d<hr size="1"/>%d', $row, $sign, $col, op($row, $col)); ?>
   </td>
  <?php endforeach; ?>
  </tr>
@@ -113,10 +114,6 @@ function play(data, current) {
         cell.append('<div class="yourAnswer">' + $("#answer").val() + '</div>');
       }
 
-      if (!data.timer) {
-        data.timer = new Date();
-      }
-
       play(data, current + 1);
     });
   }
@@ -151,12 +148,18 @@ function startPlay() {
       return {
         first: parts[1],
         second: parts[2],
-        correct: parts[1]*1 <?=$sign?> parts[2]*1};
+<?php if ('division' != $current): ?>
+        correct: parts[1]*1 <?=$sign?> parts[2]*1
+<?php else: ?>
+        correct: Math.floor(parts[1]*1 <?=$sign?> parts[2]*1)
+<?php endif; ?>
+      };
     });
     data.sort(rnd).sort(rnd).sort(rnd).sort(rnd).sort(rnd);
-    data.timer = null;
 
     $("#field").fadeIn();
+
+    data.timer = new Date();
     play(data, 0);
   }
   else {
